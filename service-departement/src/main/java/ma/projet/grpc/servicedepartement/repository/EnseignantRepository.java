@@ -3,6 +3,7 @@ package ma.projet.grpc.servicedepartement.repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.validation.constraints.NotBlank;
 import ma.projet.grpc.servicedepartement.entity.Enseignant;
 import org.springframework.data.jpa.repository.Query;
 
@@ -26,4 +27,6 @@ public interface EnseignantRepository extends JpaRepository<Enseignant, Long> {
     List<Enseignant> findByEstDispenseFalse();
 
     List<Enseignant> findByEstDispenseTrue();
+
+    Enseignant findEnseignantByNom(@NotBlank(message = "Le nom est obligatoire") String nom);
 }

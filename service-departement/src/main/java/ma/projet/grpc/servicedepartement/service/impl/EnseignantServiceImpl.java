@@ -83,4 +83,7 @@ public class EnseignantServiceImpl implements EnseignantService {
         result.put("nonDispenses", pourcentageNonDispenses);
         return result;
     }
+    public Enseignant getEnseignantByNom(String nom) {
+        return enseignantRepository.findEnseignantByNom(nom);
+    }
 }

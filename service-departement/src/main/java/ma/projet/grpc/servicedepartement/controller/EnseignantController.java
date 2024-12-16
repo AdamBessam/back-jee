@@ -59,4 +59,13 @@ public class EnseignantController {
         List<Enseignant> enseignantsDisponibles = enseignantService.getEnseignantsDisponibles();
         return ResponseEntity.ok(enseignantsDisponibles);  // Retourne la liste des enseignants disponibles
     }
+    @GetMapping("/nom/{nom}")
+    public ResponseEntity<Enseignant> getEnseignantByNom(@PathVariable String nom) {
+        Enseignant enseignant = enseignantService.getEnseignantByNom(nom);
+        if (enseignant != null) {
+            return ResponseEntity.ok(enseignant);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

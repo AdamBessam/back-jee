@@ -1,5 +1,7 @@
 package ma.projet.grpc.servicedepartement.service.impl;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import jakarta.transaction.Transactional;
 import ma.projet.grpc.servicedepartement.entity.Departement;
 import ma.projet.grpc.servicedepartement.entity.Enseignant;
@@ -8,7 +10,11 @@ import ma.projet.grpc.servicedepartement.repository.EnseignantRepository;
 import ma.projet.grpc.servicedepartement.service.DepartementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -88,6 +94,24 @@ public class DepartementServiceImpl implements DepartementService {
                         Departement::getNom,
                         departement -> departement.getEnseignants().size()
                 ));
+    }
+    @Override
+    public void saveDepartementsFromCsv(MultipartFile file) throws IOException {
+        List<Departement> departements = new ArrayList<>();
+
+        try (CSVReader csvReader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
+            String[] values;
+            while ((values = csvReader.readNext()) != null) {
+                String nom = values[0]; // Assume the first column is the department name
+                Departement departement = new Departement();
+                departement.setNom(nom);
+                departements.add(departement);
+            }
+        } catch (CsvValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        departementRepository.saveAll(departements);
     }
 
 }

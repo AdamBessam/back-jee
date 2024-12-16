@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -66,6 +68,16 @@ public class DepartementController {
     @GetMapping("/enseignants-par-departement")
     public Map<String, Integer> getNombreEnseignantsParDepartement() {
         return departementService.getNombreEnseignantsParDepartement();
+    }
+
+    @PostMapping("/upload-csv")
+    public ResponseEntity<String> uploadCsv(@RequestParam("file") MultipartFile file) {
+        try {
+            departementService.saveDepartementsFromCsv(file);
+            return ResponseEntity.ok("Départements ajoutés avec succès depuis le fichier CSV.");
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Erreur lors de la lecture du fichier CSV.");
+        }
     }
 
 

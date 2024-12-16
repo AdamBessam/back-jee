@@ -14,4 +14,5 @@ public interface EnseignantService {
     void deleteEnseignant(Long id);
     Map<String, Double> getPercentageDispenses();
     List<Enseignant> getEnseignantsDisponibles();
+    Enseignant getEnseignantByNom(String nom);
 }
